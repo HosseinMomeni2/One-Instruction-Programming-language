@@ -4,6 +4,7 @@
 #include <vector>
 #include <tuple>
 #include <map>
+#include <cstdio>
 
 // Register file
 int* REGISTER_FILE = new int[16];
@@ -179,6 +180,7 @@ int run(std::string file) {
         run_block(file, line_num);
     }
 
+    remove(temp_file.c_str());
     return line_num;
 }
 
