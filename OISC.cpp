@@ -172,9 +172,9 @@ int run_block(std::string file, int pc) {
     else return pc;
 }
 
-int main() {
+int run(std::string file) {
     int line_num = 1;
-    pre_compile("file.sbn", "file.txt");
+    std::string temp_file = pre_compile(file, "file.txt");
     std::string file = "file.txt";
     line_num = run_block(file, line_num);
 
@@ -182,8 +182,15 @@ int main() {
         run_block(file, line_num);
     }
 
+    return line_num;
+}
+
+int main() {
+    std::string file = "file.sbn";
+    int ex = run(file);
+    cout << "program finished with exit code " << ex << '\n';
+
     cout << "\n=============================\n";
-    cout << "program finished with exit code " << line_num << '\n';
     cout << "\nREGISTER_FILE:\n";
     for(int i=0; i<16; i++) cout << "R" << i << ": " << REGISTER_FILE[i] << "\n";
     cout << flush;
