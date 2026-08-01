@@ -1,39 +1,76 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
+#include <tuple>
+#include <map>
 
 using std::cout;
 using std::flush;
 
+// Register file
 int* REGISTER_FILE = new int[16];
 
-#define r0 REGISTER_FILE[0]
-#define r1 REGISTER_FILE[1]
-#define r2 REGISTER_FILE[2]
-#define r3 REGISTER_FILE[3]
-#define r4 REGISTER_FILE[4]
-#define r5 REGISTER_FILE[5]
-#define r6 REGISTER_FILE[6]
-#define r7 REGISTER_FILE[7]
-#define r8 REGISTER_FILE[8]
-#define r9 REGISTER_FILE[9]
-#define r10 REGISTER_FILE[10]
-#define r11 REGISTER_FILE[11]
-#define r12 REGISTER_FILE[12]
-#define r13 REGISTER_FILE[13]
-#define r14 REGISTER_FILE[14]
-#define r15 REGISTER_FILE[15]
-
+// Literal values
 int* LIT1 = new int;
 int* LIT2 = new int;
 int* LIT3 = new int;
 
+
 int SBN(int* source, int* target, int* dest, int* jump, int* pc) {
-    cout << *dest << " - " << *source;
+    // cout << *dest << " - " << *source;
 
     *dest = *source - *target; /// subtract
     if(*dest < 0) return *jump; /// branch if negative
     else return *pc + 1;
+}
+
+std::string pre_compile(std::string file, std::string tar = ".temp.OISC")
+{
+    /// parses the whole file and converts the labels' names to line number
+
+    // Labels
+    std::map<std::string, int> LABELS;
+
+    std::ifstream f(file);
+    std::ofstream t(tar);
+    std::string line;
+    int line_number = 0;
+    while(std::getline(f, line)) {
+        if(line[0] == '#') continue;
+
+        if(line[0] == 'L') {
+            std::string label = line.substr(2);
+            LABELS[label] = line_number + 1;
+            t << "###" << label << '\n';
+
+        } else {
+            std::string label;
+            int comma = 0;
+            for(auto x : line) {
+                if(x == '#') break;
+
+                if(x == ',') comma++;
+                else if(x != ' ' && comma == 4) {
+                    label.push_back(x);
+                }
+            }
+            if(label.empty()) label = "###";
+
+            while(line.back() != ',') line.pop_back();
+            line.push_back(' ');
+            line += std::to_string(LABELS[label]);
+
+            t << line << '\n';
+        }
+
+        line_number ++;
+    }
+
+    f.close();
+    t.close();
+
+    return tar;
 }
 
 int** pars(std::string line) {
@@ -108,6 +145,7 @@ int** pars(std::string line) {
 }
 
 int run(std::string file, int pc) {
+    // cout << pc << std::endl;
     std::ifstream f(file);
 
     std::string line;
@@ -116,13 +154,15 @@ int run(std::string file, int pc) {
     bool end = true;
 
     while(std::getline(f, line)) {
+        if(line[0] == '#') continue;
+
         int** params = pars(line);
-        for(int i=0; i<4; i++) cout << *params[i] << std::endl;
   
         int new_pc = SBN(params[0], params[1], params[2], params[3], &pc);
         delete []params;
 
         if(new_pc != pc + 1){
+            cout << "branch occured because " << *params[0] << " < " << *params[1] << std::endl;
             pc = new_pc;
             end = false;
             break;
@@ -136,7 +176,9 @@ int run(std::string file, int pc) {
 
 int main() {
     int line_num = 1;
-    std::string file = "file.sbn";
+    pre_compile("file.sbn", "file.txt");
+    // return 0;
+    std::string file = "file.txt";
     line_num = run(file, line_num);
 
     while(line_num){
