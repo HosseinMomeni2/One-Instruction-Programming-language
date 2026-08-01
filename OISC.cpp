@@ -192,8 +192,14 @@ void RF_log() {
     cout << flush;
 }
 
-int main() {
-    std::string file = "file.sbn";
+int main(int argc, char* argv[]) {
+    if(argc != 2) {
+        cout << "one argument needed! (file name)" << std::endl;
+        return 0;
+    } 
+
+    std::string file = argv[1];
+    cout << "running " << file << std::endl;
     int ex = run(file);
     cout << "program finished with exit code " << ex << '\n';
     RF_log();
