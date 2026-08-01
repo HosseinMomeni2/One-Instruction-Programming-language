@@ -35,11 +35,12 @@ std::string pre_compile(std::string file, std::string tar = ".temp.OISC")
     std::string line;
     int line_number = 0;
     while(std::getline(f, line)) {
-        if(line[0] == '#') continue;
+        if(line.empty()) continue;
+        if(line[0] == '#' || line[0] == '\n') continue;
 
         if(line[0] == 'L') {
             std::string label = line.substr(2);
-            LABELS[label] = line_number + 1;
+            LABELS[label] = line_number;
             t << "###" << label << '\n';
 
         } else {
@@ -151,7 +152,10 @@ int run_block(std::string file, int pc) {
     bool end = true;
 
     while(std::getline(f, line)) {
-        if(line[0] == '#') continue;
+        if(line.empty()) continue;
+        if(line[0] == '#' || line[0] == '\n') continue;
+
+        std::cout << line << std::endl;
 
         int** params = pars(line);
   

@@ -1,0 +1,12 @@
+###start
+sbn, 0, -5, r15, 0
+sbn, 0, -2, r1, 0
+sbn, 0, -1, r0, 0
+sbn, 0, r1, r14, 0
+###next1
+sbn, r0, r14, r2, 0
+sbn, 0, r2, r14, 0
+###next2
+sbn, r1, r14, r3, 0
+###end
+sbn, 1, 0, r15, 10
