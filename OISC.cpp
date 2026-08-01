@@ -5,9 +5,6 @@
 #include <tuple>
 #include <map>
 
-using std::cout;
-using std::flush;
-
 // Register file
 int* REGISTER_FILE = new int[16];
 
@@ -186,22 +183,21 @@ int run(std::string file) {
 }
 
 void RF_log() {
-    cout << "\n=============================\n";
-    cout << "\nREGISTER_FILE:\n";
-    for(int i=0; i<16; i++) cout << "R" << i << ": " << REGISTER_FILE[i] << "\n";
-    cout << flush;
+    std::cout << "\n=============================\n";
+    std::cout << "REGISTER_FILE:\n";
+    for(int i=0; i<16; i++) std::cout << "R" << i << ": " << REGISTER_FILE[i] << "\n";
+    std::cout << std::flush;
 }
 
 int main(int argc, char* argv[]) {
     if(argc != 2) {
-        cout << "one argument needed! (file name)" << std::endl;
+        std::cout << "one argument needed! (file name)\n" << std::flush;
         return 0;
     } 
 
     std::string file = argv[1];
-    cout << "running " << file << std::endl;
     int ex = run(file);
-    cout << "program finished with exit code " << ex << '\n';
+    std::cout << "program finished with exit code " << ex << '\n' << std::flush;
     RF_log();
 
     return 0;
