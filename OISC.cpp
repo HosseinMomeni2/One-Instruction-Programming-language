@@ -175,7 +175,7 @@ int run_block(std::string file, int pc) {
 int run(std::string file) {
     int line_num = 1;
     std::string temp_file = pre_compile(file, "file.txt");
-    std::string file = "file.txt";
+    file = "file.txt";
     line_num = run_block(file, line_num);
 
     while(line_num){
@@ -185,15 +185,18 @@ int run(std::string file) {
     return line_num;
 }
 
-int main() {
-    std::string file = "file.sbn";
-    int ex = run(file);
-    cout << "program finished with exit code " << ex << '\n';
-
+void RF_log() {
     cout << "\n=============================\n";
     cout << "\nREGISTER_FILE:\n";
     for(int i=0; i<16; i++) cout << "R" << i << ": " << REGISTER_FILE[i] << "\n";
     cout << flush;
+}
+
+int main() {
+    std::string file = "file.sbn";
+    int ex = run(file);
+    cout << "program finished with exit code " << ex << '\n';
+    RF_log();
 
     return 0;
 }
