@@ -145,7 +145,6 @@ int** pars(std::string line) {
 }
 
 int run_block(std::string file, int pc) {
-    // cout << pc << std::endl;
     std::ifstream f(file);
 
     std::string line;
@@ -162,7 +161,6 @@ int run_block(std::string file, int pc) {
         delete []params;
 
         if(new_pc != pc + 1){
-            cout << "branch occured because " << *params[0] << " < " << *params[1] << std::endl;
             pc = new_pc;
             end = false;
             break;
