@@ -1,4 +1,0 @@
-L start
-sbn, 12, 7, r3, start
-L end
-sbn, 12, 6, r2, end

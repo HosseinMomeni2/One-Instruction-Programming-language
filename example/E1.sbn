@@ -1,0 +1,6 @@
+### Example 1
+## There is no branches and there will be r3=5 & r2=6
+L start
+sbn, 12, 7, r3, start
+L end
+sbn, 12, 6, r2, end
