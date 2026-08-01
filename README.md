@@ -1,6 +1,6 @@
 # One Instruction Programming Language
 
-This a minimal simulation of an OISC (One Instruction Set Computer) which is only able to run the SBN (Subtract and Branch if Negative) command.  
+This is a minimal simulation of an OISC (One Instruction Set Computer) which is only able to run the SBN (Subtract and Branch if Negative) command.  
 It can be proved that a machine which can run an SBN is a [turing machine](https://en.wikipedia.org/wiki/Turing_machine), therefor it could solve any problem. (refer to [OISC](https://en.wikipedia.org/wiki/One-instruction_set_computer))
 
 ## Features
