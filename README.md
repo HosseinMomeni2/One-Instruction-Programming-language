@@ -10,14 +10,22 @@ It can be proved that a machine which can run an SBN is a [turing machine](https
 
 ## Installation
 
-You can simply clone the repository and make the project:
+You can clone the repository and make the project:
 ```bash
 git clone https://github.com/HosseinMomeni2/One-Instruction-Programming-language.git
 cd One-Instruction-Programming-language
 make
 ```
 
-Then, add your SBN code to the file and run the built file.
+Then, run the examples:
+```bash
+./OISC.out example/E1
+```
+
+or make your own sbn code and run it:
+```bash
+./OISC.out <file_name>
+```
 
 
 ## Syntax
