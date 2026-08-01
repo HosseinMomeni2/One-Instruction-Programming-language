@@ -144,7 +144,7 @@ int** pars(std::string line) {
     return params;
 }
 
-int run(std::string file, int pc) {
+int run_block(std::string file, int pc) {
     // cout << pc << std::endl;
     std::ifstream f(file);
 
@@ -177,12 +177,11 @@ int run(std::string file, int pc) {
 int main() {
     int line_num = 1;
     pre_compile("file.sbn", "file.txt");
-    // return 0;
     std::string file = "file.txt";
-    line_num = run(file, line_num);
+    line_num = run_block(file, line_num);
 
     while(line_num){
-        run(file, line_num);
+        run_block(file, line_num);
     }
 
     cout << "\n=============================\n";
