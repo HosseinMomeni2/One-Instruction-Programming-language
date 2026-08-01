@@ -31,7 +31,7 @@ std::string pre_compile(std::string file, std::string tar = ".temp.OISC")
     std::map<std::string, int> LABELS;
 
     std::ifstream f(file);
-    std::ofstream t(tar);
+    std::ofstream temp_write(tar+".temp");
     std::string line;
     int line_number = 0;
     while(std::getline(f, line)) {
@@ -41,9 +41,23 @@ std::string pre_compile(std::string file, std::string tar = ".temp.OISC")
         if(line[0] == 'L') {
             std::string label = line.substr(2);
             LABELS[label] = line_number;
-            t << "###" << label << '\n';
+            temp_write << "###" << label << '\n';
 
         } else {
+            temp_write << line << '\n';
+        }
+
+        line_number ++;
+    }
+    temp_write.close();
+    f.close();
+
+    std::ofstream target(tar);
+    std::ifstream temp_read(tar + ".temp");
+    while(getline(temp_read, line)) {
+        if(line.size() < 3) continue;
+        if(line.substr(0, 3) == "sbn")
+        {
             std::string label;
             int comma = 0;
             for(auto x : line) {
@@ -59,15 +73,13 @@ std::string pre_compile(std::string file, std::string tar = ".temp.OISC")
             while(line.back() != ',') line.pop_back();
             line.push_back(' ');
             line += std::to_string(LABELS[label]);
-
-            t << line << '\n';
         }
 
-        line_number ++;
+        target << line << '\n';
     }
 
-    f.close();
-    t.close();
+    target.close();
+    temp_read.close();
 
     return tar;
 }
@@ -152,10 +164,10 @@ int run_block(std::string file, int pc) {
     bool end = true;
 
     while(std::getline(f, line)) {
+        std::cout << line << std::endl;
         if(line.empty()) continue;
         if(line[0] == '#' || line[0] == '\n') continue;
 
-        std::cout << line << std::endl;
 
         int** params = pars(line);
   
@@ -163,6 +175,7 @@ int run_block(std::string file, int pc) {
         delete []params;
 
         if(new_pc != pc + 1){
+            std::cout << "BRANCH" << std::endl;
             pc = new_pc;
             end = false;
             break;
@@ -181,10 +194,10 @@ int run(std::string file) {
     line_num = run_block(file, line_num);
 
     while(line_num){
-        run_block(file, line_num);
+        line_num = run_block(file, line_num);
     }
 
-    remove(temp_file.c_str());
+    // remove(temp_file.c_str());
     return line_num;
 }
 
