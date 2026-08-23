@@ -212,6 +212,12 @@ int run_block(std::string file, int pc) {
 }
 
 int run(std::string file) {
+    //check if file exists
+    std::ifstream file_exist(file.c_str());
+    bool exist = file_exist.good();
+    file_exist.close();
+    if(!exist) return -1;
+
     int line_num = 1;
     file = pre_compile(file, "file.txt");
     line_num = run_block(file, line_num);
