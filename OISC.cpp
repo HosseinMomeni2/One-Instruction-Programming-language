@@ -23,6 +23,33 @@ int SBN(int* source, int* target, int* dest, int* jump, int* pc) {
     else return *pc + 1;
 }
 
+void output(const std::string& line)
+{
+    // executes an output line in the format:
+    /// out r12
+    /// out hello
+
+    std::string param;
+    for(int i=3; i<line.size(); i++)
+    {
+        if(line[i] == ' ') continue;
+        param.push_back(line[i]);
+    }
+
+    if(param.empty()) return;
+
+    if(param[0] == 'r')
+    {
+        int reg = stoi(param.substr(1));
+        std::cout << REGISTER_FILE[reg] << std::endl;
+    }
+    else
+    {
+        if(param[0] == '\\') param = param.substr(1);
+        std::cout << param << std::endl;
+    }
+}
+
 std::string pre_compile(std::string file, std::string tar = ".temp.OISC")
 {
     /// parses the whole file and converts the labels' names to line number
@@ -164,10 +191,15 @@ int run_block(std::string file, int pc) {
     bool end = true;
 
     while(std::getline(f, line)) {
-        std::cout << line << std::endl;
+        // std::cout << line << std::endl;
         if(line.empty()) continue;
         if(line[0] == '#' || line[0] == '\n') continue;
 
+        if(line.size()>3 && line.substr(0, 3) == "out")
+        {
+            output(line);
+            continue;
+        }
 
         int** params = pars(line);
   
@@ -175,7 +207,7 @@ int run_block(std::string file, int pc) {
         delete []params;
 
         if(new_pc != pc + 1){
-            std::cout << "BRANCH" << std::endl;
+            // std::cout << "BRANCH" << std::endl;
             pc = new_pc;
             end = false;
             break;
