@@ -1,7 +1,7 @@
 # One Instruction Programming Language
 
-This is a minimal simulation of an OISC (One Instruction Set Computer) which is only able to run the SBN (Subtract and Branch if Negative) command.  
-It can be proved that a machine which can run an SBN is a [turing machine](https://en.wikipedia.org/wiki/Turing_machine), therefor it could solve any problem. (refer to [OISC](https://en.wikipedia.org/wiki/One-instruction_set_computer))
+This is a minimal simulation of an OISC (One Instruction Set Computer) which implements only the SBN (Subtract and Branch if Negative) instruction.  
+It has been proven that a machine capable of executing SBN is [turing-complete](https://en.wikipedia.org/wiki/Turing_machine), and therefore can solve any computable problem. (See: [OISC](https://en.wikipedia.org/wiki/One-instruction_set_computer))
 
 ## Features
 
@@ -10,7 +10,7 @@ It can be proved that a machine which can run an SBN is a [turing machine](https
 
 ## Installation
 
-You can clone the repository and make the project:
+You can clone the repository and make the project using the Makefile:
 ```bash
 git clone https://github.com/HosseinMomeni2/One-Instruction-Programming-language.git
 cd One-Instruction-Programming-language
@@ -26,14 +26,17 @@ or make your own sbn code and run it:
 ```bash
 ./OISC.out <file_name>
 ```
-
+note that you can use following flags after the file name:
+```text
+-d    debug
+```
 
 ## Syntax
 
-It is a one instruction set language so there is not much about the syntax, but here is some details to know.
+As a one-instruction language, the syntax is minimal. Nonetheless, here are a few important details.
 
 ### Comments
-You can write a comment using # character:
+Comment lines begin with `#` character:
 ```text
 # this is a comment
 ```
@@ -43,7 +46,10 @@ The shape of an SBN operation line will be like:
 ```text
 sbn, <source>, <target>, <destination>, <LABEL>
 ```
-in which the source and destination could be literal values (like 12 or 5) or they could be registers (like r6) and the destination could only be a register. The result of `source - target` will be calculated and stored in `destination`. After that it will be checked if the result (which is now the value in destination) is negative or not. if it is, the program counter will jump to the next line of the `LABEL` (which should be present somewhere in the file).
+- `<source>` and `<target>` can be either literal values (e.g., `12`, `-5`) or registers (e.g., `r6`).
+- `<destination>` must be a register.
+- The operation computes `source - target` and stores the result in `<destination>`.
+- If the resulting value (now stored in `<destination>`) is negative, the program counter jumps to the line immediately following the specified `<LABEL>` (which must be defined elsewhere in the file).
 
 #### example:
 
@@ -61,11 +67,29 @@ L <label_name>
 #### example:
 ```text
 L foo
-# pc will jump to this line whenever foo is called
+# pc will jump to this line whenever the branch to foo occures
 ```
 
-## Contributing
-This project is not in an stable state yet, therefor it's not possible to accept contributors, but I will always be happy to take your advice.
+### Outputs
+The keyword `out` provides a simple output mechanism:
+```test
+out <text_or_register>
+```
+
+#### example:
+```text
+out hello_world
+# prints hello_world
+
+out r1
+# prints the current value of register 1
+
+out \right_starts_with_r_but_is_not_a_register!
+# prints the literal text (since it's starting with \)
+```
+
+## Contribution
+I welcome your feedback and suggestions — feel free to open an issue or reach out via [email](h.momeni.sh@gmail.com). Contributions are also very much appreciated.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
