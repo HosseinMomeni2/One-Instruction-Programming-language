@@ -16,35 +16,28 @@ int* LIT3 = new int;
 
 
 int SBN(int* source, int* target, int* dest, int* jump, int* pc) {
-    // cout << *dest << " - " << *source;
-
     *dest = *source - *target; /// subtract
     if(*dest < 0) return *jump; /// branch if negative
     else return *pc + 1;
 }
 
-void output(const std::string& line)
-{
+void output(const std::string& line) {
     // executes an output line in the format:
     /// out r12
     /// out hello
 
     std::string param;
-    for(int i=3; i<line.size(); i++)
-    {
+    for(int i=3; i<line.size(); i++) {
         if(line[i] == ' ') continue;
         param.push_back(line[i]);
     }
 
     if(param.empty()) return;
 
-    if(param[0] == 'r')
-    {
+    if(param[0] == 'r') {
         int reg = stoi(param.substr(1));
         std::cout << REGISTER_FILE[reg] << std::endl;
-    }
-    else
-    {
+    } else {
         if(param[0] == '\\') param = param.substr(1);
         std::cout << param << std::endl;
     }
@@ -107,6 +100,7 @@ std::string pre_compile(std::string file, std::string tar = ".temp.OISC")
 
     target.close();
     temp_read.close();
+    remove((tar + ".temp").c_str());
 
     return tar;
 }
@@ -191,7 +185,6 @@ int run_block(std::string file, int pc) {
     bool end = true;
 
     while(std::getline(f, line)) {
-        // std::cout << line << std::endl;
         if(line.empty()) continue;
         if(line[0] == '#' || line[0] == '\n') continue;
 
@@ -207,7 +200,6 @@ int run_block(std::string file, int pc) {
         delete []params;
 
         if(new_pc != pc + 1){
-            // std::cout << "BRANCH" << std::endl;
             pc = new_pc;
             end = false;
             break;
@@ -221,15 +213,14 @@ int run_block(std::string file, int pc) {
 
 int run(std::string file) {
     int line_num = 1;
-    std::string temp_file = pre_compile(file, "file.txt");
-    file = "file.txt";
+    file = pre_compile(file, "file.txt");
     line_num = run_block(file, line_num);
 
     while(line_num){
         line_num = run_block(file, line_num);
     }
 
-    // remove(temp_file.c_str());
+    remove(file.c_str());
     return line_num;
 }
 
@@ -241,15 +232,17 @@ void RF_log() {
 }
 
 int main(int argc, char* argv[]) {
-    if(argc != 2) {
+    if(argc < 2) {
         std::cout << "one argument needed! (file name)\n" << std::flush;
         return 0;
-    } 
+    }
+
+    bool debug = false;
 
     std::string file = argv[1];
     int ex = run(file);
-    std::cout << "program finished with exit code " << ex << '\n' << std::flush;
-    RF_log();
+    std::cout << "\nprogram finished with exit code " << ex << '\n' << std::flush;
+    if(debug) RF_log();
 
     return 0;
 }
