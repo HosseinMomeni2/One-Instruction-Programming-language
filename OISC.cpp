@@ -5,6 +5,7 @@
 #include <tuple>
 #include <map>
 #include <cstdio>
+#include <unistd.h>
 
 // Register file
 int* REGISTER_FILE = new int[16];
@@ -243,7 +244,7 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
-    bool debug = false;
+    bool debug = getopt(argc, argv, "d") != -1;
 
     std::string file = argv[1];
     int ex = run(file);
