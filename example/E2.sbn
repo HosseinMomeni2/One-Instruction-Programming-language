@@ -1,25 +1,13 @@
 ### Example 2
-## This will calculate 5 first fibo numbers
-
+## There is no branches and there will be r3=5 & r2=6
+## The result will be printed
 L start
-#set r15 to 5
-sbn, 0, -5, r15, end
-
-#set r0, r1 to 1 and 2
-sbn, 0, -2, r1, end
-sbn, 0, -1, r0, end
-
-#calculate the -r1 and set r2 = r0 - (-r1)
-sbn, 0, r1, r14, next1
-
-L next1
-sbn, r0, r14, r2, end
-
-#calculate the -r2 and set r3 = r1 - (-r2)
-sbn, 0, r2, r14, next2
-
-L next2
-sbn, r1, r14, r3, end
-
+sbn, 12, 7, r3, start
 L end
-sbn, 1, 0, r15, end
+sbn, 12, 6, r2, end
+
+out \r2:
+out r2
+out \r3:
+out r3
+out hello_world

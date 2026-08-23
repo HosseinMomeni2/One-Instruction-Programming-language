@@ -1,0 +1,35 @@
+### Example 3
+## This will calculate and print 5 first fibo numbers
+
+L start
+#set r15 to 5
+sbn, 0, -5, r15, end
+
+#set r0, r1 to 1 and 2
+sbn, 0, -1, r0, end
+sbn, 0, -2, r1, end
+
+#print r0 and r1
+out r0
+out r1
+
+#main loop
+L loop1
+#store -r0 into r14
+sbn, 0, r0, r14, next1
+#store -r1 in r2 and then -r2 in r0
+#this will be r0 = r1
+L next1
+sbn, 0, r1, r2, next2
+L next2
+sbn, 0, r2, r0, end
+#since r14 is equal to -r0, -r14 should be added to r1
+sbn, r1, r14, r1, end
+#print the new sentence
+out r1
+#count
+sbn, r15, 1, r15, end
+sbn, 0, 1, r13, loop1
+
+L end
+out finish
