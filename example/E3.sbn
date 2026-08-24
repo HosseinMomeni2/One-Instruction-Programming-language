@@ -1,9 +1,10 @@
 ### Example 3
-## This will calculate and print 5 first fibo numbers
+## This will calculate and print n first fibo numbers
 
 L start
-#set r15 to 5
-sbn, 0, -5, r15, end
+#input r15
+inp r15
+sbn, r15, 3, r15, end 
 
 #set r0, r1 to 1 and 2
 sbn, 0, -1, r0, end

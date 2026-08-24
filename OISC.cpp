@@ -44,6 +44,23 @@ void output(const std::string& line) {
     }
 }
 
+void input(const std::string& line) {
+    // executes an input line in the format:
+    /// inp r12
+
+    std::string param;
+    for(int i=3; i<line.size(); i++) {
+        if(line[i] == ' ') continue;
+        param.push_back(line[i]);
+    }
+
+    if(param.empty() || param[0] != 'r') return;
+    param = param.substr(1);
+
+    int reg = stoi(param);
+    std::cin >> REGISTER_FILE[reg];
+}
+
 std::string pre_compile(std::string file, std::string tar = ".temp.OISC")
 {
     /// parses the whole file and converts the labels' names to line number
@@ -189,6 +206,14 @@ int run_block(std::string file, int pc) {
         if(line.empty()) continue;
         if(line[0] == '#' || line[0] == '\n') continue;
 
+        ///input
+        if(line.size()>3 && line.substr(0, 3) == "inp")
+        {
+            input(line);
+            continue;
+        }
+
+        ///output
         if(line.size()>3 && line.substr(0, 3) == "out")
         {
             output(line);
