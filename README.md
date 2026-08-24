@@ -89,11 +89,11 @@ out \right_starts_with_r_but_is_not_a_register!
 ```
 
 ## Future Plans
-- Add ability to print texts with spaces in the middle
-- Add an input mechanism
-- Add a load/store command
-- Seperate functions into multi files
-- Add some flags (e.g, --help)
+- [ ] Add ability to print texts with spaces in the middle
+- [ ] Add an input mechanism
+- [ ] Add a load/store command
+- [ ] Seperate functions into multi files
+- [ ] Add some flags (e.g, --help)
 
 ## Contribution
 I welcome your feedback and suggestions — feel free to open an issue or reach out via [email](h.momeni.sh@gmail.com). Contributions are also very much appreciated.
