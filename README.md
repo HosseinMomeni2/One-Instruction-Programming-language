@@ -70,6 +70,18 @@ L foo
 # pc will jump to this line whenever the branch to foo occures
 ```
 
+### Inputs
+The `inp` keyword will take numerical inputs:
+```text
+inp <register>
+```
+
+#### example:
+```text
+inp r7
+# waits for input and stores it into r7
+```
+
 ### Outputs
 The keyword `out` provides a simple output mechanism:
 ```test
@@ -90,7 +102,7 @@ out \right_starts_with_r_but_is_not_a_register!
 
 ## Future Plans
 - [ ] Add ability to print texts with spaces in the middle
-- [ ] Add an input mechanism
+- [X] Add an input mechanism
 - [ ] Add a load/store command
 - [ ] Seperate functions into multi files
 - [ ] Add some flags (e.g, --help)
