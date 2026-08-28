@@ -15,6 +15,8 @@ int* LIT1 = new int;
 int* LIT2 = new int;
 int* LIT3 = new int;
 
+std::map <std::string, int> LABELS;
+
 
 int SBN(int* source, int* target, int* dest, int* jump, int* pc) {
     *dest = *source - *target; /// subtract
@@ -61,70 +63,45 @@ void input(const std::string& line) {
     std::cin >> REGISTER_FILE[reg];
 }
 
-std::string pre_compile(std::string file, std::string tar = ".temp.OISC")
+bool is_numeric(const char c)   {return '0' <= c && c <= '9';}
+bool is_lowercase(const char c) {return 'a' <= c && c <= 'z';}
+bool is_uppercase(const char c) {return 'A' <= c && c <= 'Z';}
+bool is_letter(const char c) {return is_lowercase(c) || is_uppercase(c);}
+std::string pre_compile(std::string file)
 {
-    /// parses the whole file and converts the labels' names to line number
-
-    // Labels
-    std::map<std::string, int> LABELS;
+    /// parses the whole file and finds the labels' names to line numbers
+    /// Label names should not start with numbers or '+' of '-'
+    /// Label names should only contain letters and numbers
 
     std::ifstream f(file);
-    std::ofstream temp_write(tar+".temp");
     std::string line;
-    int line_number = 0;
+    int line_number = 1;
     while(std::getline(f, line)) {
-        if(line.empty()) continue;
-        if(line[0] == '#' || line[0] == '\n') continue;
+        if(line.size() && line[0] == 'L') {
+            int i=1;
+            while(i<line.size() && line[i]==' ') i++;
 
-        if(line[0] == 'L') {
-            std::string label = line.substr(2);
-            LABELS[label] = line_number;
-            temp_write << "###" << label << '\n';
+            std::string label;
+            for(i; i<line.size(); i++) {
+                if(is_numeric(line[i]) || is_letter(line[i])) label.push_back(line[i]);
+                else return "label contains invalid character at line " + std::to_string(line_number);
+            }
 
-        } else {
-            temp_write << line << '\n';
+            if(label.empty() || is_numeric(label[0]) || label[0] == '+' || label[0] == '-')
+                return "label is empty or starts with an invalid character at line " + std::to_string(line_number);
+            
+            if(LABELS.find(label) != LABELS.end())
+                return "label is declared twice at line " + std::to_string(line_number);
+            LABELS.insert({label, line_number});
         }
-
+        
         line_number ++;
     }
-    temp_write.close();
-    f.close();
-
-    std::ofstream target(tar);
-    std::ifstream temp_read(tar + ".temp");
-    while(getline(temp_read, line)) {
-        if(line.size() < 3) continue;
-        if(line.substr(0, 3) == "sbn")
-        {
-            std::string label;
-            int comma = 0;
-            for(auto x : line) {
-                if(x == '#') break;
-
-                if(x == ',') comma++;
-                else if(x != ' ' && comma == 4) {
-                    label.push_back(x);
-                }
-            }
-            if(label.empty()) label = "###";
-
-            while(line.back() != ',') line.pop_back();
-            line.push_back(' ');
-            line += std::to_string(LABELS[label]);
-        }
-
-        target << line << '\n';
-    }
-
-    target.close();
-    temp_read.close();
-    remove((tar + ".temp").c_str());
-
-    return tar;
+    return "ok";
 }
 
-int** pars(std::string line) {
-    for(auto x : line) if(x>='A' && x<='Z') x -= 'A' - 'a'; /// to lowercase
+int** pars(std::string line, int current_pc) {
+    for(auto x : line) if(is_uppercase(x)) x -= 'A' - 'a'; /// to lowercase
     while(line.back() == ' ') line.pop_back();
     line.push_back(',');
 
@@ -135,6 +112,11 @@ int** pars(std::string line) {
     {
         if(x == ' ') continue;
         else if(x == ','){
+            if(current.empty()) {
+                std::cout << "parser: missing argument in line ";
+                return nullptr;
+            }
+
             std::string num;
             int reg;
             switch (i)
@@ -174,7 +156,13 @@ int** pars(std::string line) {
                 break;
 
             case 4:
-                *LIT3 = std::stoi(current);
+                if(current[0] == '+' || current[0] == '-') {
+                    *LIT3 = std::stoi(current.substr(1)) + current_pc;
+                } else if(is_numeric(current[0])) {
+                    *LIT3 = std::stoi(current);
+                } else {
+                    *LIT3 = LABELS[current];
+                }
                 params[i-1] = LIT3;
                 break;
             
@@ -198,13 +186,13 @@ int run_block(std::string file, int pc) {
     std::ifstream f(file);
 
     std::string line;
-    for(int i=0; i<pc; i++) std::getline(f, line);
+    for(int i=1; i<pc; i++) std::getline(f, line);
 
     bool end = true;
 
     while(std::getline(f, line)) {
         if(line.empty()) continue;
-        if(line[0] == '#' || line[0] == '\n') continue;
+        if(line[0] == '#' || line[0] == '\n' || line[0]=='L') continue;
 
         ///input
         if(line.size()>3 && line.substr(0, 3) == "inp")
@@ -220,7 +208,7 @@ int run_block(std::string file, int pc) {
             continue;
         }
 
-        int** params = pars(line);
+        int** params = pars(line, pc);
   
         int new_pc = SBN(params[0], params[1], params[2], params[3], &pc);
         delete []params;
@@ -244,15 +232,18 @@ int run(std::string file) {
     file_exist.close();
     if(!exist) return -1;
 
-    int line_num = 1;
-    file = pre_compile(file, "file.txt");
-    line_num = run_block(file, line_num);
+    std::string pre_compile_result = pre_compile(file);
+    if(pre_compile_result != "ok")
+    {
+        std::cout << "precompile error: " << pre_compile_result << std::endl;
+        return -1;
+    }
 
+    int line_num = 1;
+    line_num = run_block(file, line_num);
     while(line_num){
         line_num = run_block(file, line_num);
     }
-
-    remove(file.c_str());
     return line_num;
 }
 
