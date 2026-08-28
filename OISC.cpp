@@ -213,8 +213,14 @@ int run_block(std::string file, int pc) {
     bool end = true;
 
     while(std::getline(f, line)) {
-        if(line.empty()) continue;
-        if(line[0] == '#' || line[0] == '\n' || line[0]=='L') continue;
+        if(line.empty()) {
+            pc ++;
+            continue;
+        }
+        if(line[0] == '#' || line[0] == '\n' || line[0]=='L') {
+            pc ++;
+            continue;
+        }
 
         ///input
         if(line.size()>3 && line.substr(0, 3) == "inp") {
