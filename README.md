@@ -50,12 +50,21 @@ sbn, <source>, <target>, <destination>, <LABEL>
 - `<destination>` must be a register.
 - The operation computes `source - target` and stores the result in `<destination>`.
 - If the resulting value (now stored in `<destination>`) is negative, the program counter jumps to the line immediately following the specified `<LABEL>` (which must be defined elsewhere in the file).
+- `<destination>` could be a label's name, a line number, or a value to add (like +14 or -7)
 
 #### example:
 
 ```test
-#the branch won't happen and r3 becomes 6
 SBN, 12, 5, r3, myLabel
+# the branch won't happen and r3 becomes 6
+
+SBN, r1, 5, r3, 17
+# r3 will become r1-5 and pc will jump to 17 if result is negative
+
+# some more examples:
+SBN, 12, r2, r3, myLabel12
+SBN, r1, r2, r3, +1
+SBN, r1, r2, r3, -10
 ```
 
 ### Label Definition
@@ -64,10 +73,15 @@ A label should be defined in a particular line in the following format:
 L <label_name>
 ```
 
+- A label's name should only contain english letters (in both uppercase and lowercase) and digits
+- A Label's name can not start with a digit
+
 #### example:
 ```text
 L foo
 # pc will jump to this line whenever the branch to foo occures
+
+L next
 ```
 
 ### Inputs
