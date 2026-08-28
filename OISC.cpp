@@ -101,6 +101,9 @@ std::string pre_compile(std::string file)
 }
 
 int** pars(std::string line, int current_pc) {
+    /// Parses an sbn line and finds all the arguments
+    /// Returns an array of pointers to arguments values
+
     for(auto x : line) if(is_uppercase(x)) x -= 'A' - 'a'; /// to lowercase
     while(line.back() == ' ') line.pop_back();
     line.push_back(',');
@@ -209,6 +212,10 @@ int run_block(std::string file, int pc) {
         }
 
         int** params = pars(line, pc);
+        if(!params) {
+            std::cout << pc << std::endl;
+            return -1;
+        }
   
         int new_pc = SBN(params[0], params[1], params[2], params[3], &pc);
         delete []params;
@@ -240,8 +247,7 @@ int run(std::string file) {
     }
 
     int line_num = 1;
-    line_num = run_block(file, line_num);
-    while(line_num){
+    while(line_num>0){
         line_num = run_block(file, line_num);
     }
     return line_num;
