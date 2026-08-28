@@ -159,7 +159,10 @@ int** pars(std::string line, int current_pc) {
                 break;
 
             case 4:
-                if(current[0] == '+' || current[0] == '-') {
+                if(current[0] == 'r') {
+                    int reg = stoi(current.substr(1));
+                    *LIT3 = REGISTER_FILE[reg];
+                } else if(current[0] == '+' || current[0] == '-') {
                     *LIT3 = std::stoi(current.substr(1)) + current_pc;
                 } else if(is_numeric(current[0])) {
                     *LIT3 = std::stoi(current);
