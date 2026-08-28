@@ -217,29 +217,29 @@ int run_block(std::string file, int pc) {
         if(line[0] == '#' || line[0] == '\n' || line[0]=='L') continue;
 
         ///input
-        if(line.size()>3 && line.substr(0, 3) == "inp")
-        {
+        if(line.size()>3 && line.substr(0, 3) == "inp") {
             input(line);
+            pc ++;
             continue;
         }
 
         ///output
-        if(line.size()>3 && line.substr(0, 3) == "out")
-        {
+        if(line.size()>3 && line.substr(0, 3) == "out") {
             output(line);
+            pc ++;
             continue;
         }
 
         ///link
-        if(line.size()>4 && line.substr(0, 4) == "link")
-        {
+        if(line.size()>4 && line.substr(0, 4) == "link") {
             link(line, pc);
+            pc ++;
             continue;
         }
 
         int** params = pars(line, pc);
         if(!params) {
-            std::cout << pc << std::endl;
+            std::cout << "error at line " << pc << std::endl;
             return -1;
         }
   
@@ -247,9 +247,10 @@ int run_block(std::string file, int pc) {
         delete []params;
 
         if(new_pc != pc + 1){
-            pc = new_pc;
-            end = false;
-            break;
+            /// branch occuered
+            pc = new_pc; /// pc should be updated
+            end = false; /// that is not the end of program for sure
+            break; /// this while loop should break and a new one from the new_pc should start
         }
         pc = new_pc;
     }
