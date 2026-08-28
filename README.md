@@ -50,7 +50,7 @@ sbn, <source>, <target>, <destination>, <LABEL>
 - `<destination>` must be a register.
 - The operation computes `source - target` and stores the result in `<destination>`.
 - If the resulting value (now stored in `<destination>`) is negative, the program counter jumps to the line immediately following the specified `<LABEL>` (which must be defined elsewhere in the file).
-- `<destination>` could be a label's name, a line number, or a value to add (like +14 or -7)
+- `<destination>` could be a label's name, a literal line number, a line number stored in a register,  or a value to add (like +14 or -7)
 
 #### example:
 
@@ -65,6 +65,7 @@ SBN, r1, 5, r3, 17
 SBN, 12, r2, r3, myLabel12
 SBN, r1, r2, r3, +1
 SBN, r1, r2, r3, -10
+SBN, r1, r2, r3, r7
 ```
 
 ### Label Definition
