@@ -46,6 +46,22 @@ void output(const std::string& line) {
     }
 }
 
+void link(const std::string& line, int line_number) {
+    // executes a link line like:
+    /// link r5
+
+    // it will store the next line number in the given register
+
+    int reg;
+    for(int i=0; i<line.size(); i++)
+        if(line[i] == 'r') {
+            reg = stoi(line.substr(i+1));
+            break;
+        }
+
+    REGISTER_FILE[reg] = line_number + 1;
+}
+
 void input(const std::string& line) {
     // executes an input line in the format:
     /// inp r12
@@ -211,6 +227,13 @@ int run_block(std::string file, int pc) {
         if(line.size()>3 && line.substr(0, 3) == "out")
         {
             output(line);
+            continue;
+        }
+
+        ///link
+        if(line.size()>4 && line.substr(0, 4) == "link")
+        {
+            link(line, pc);
             continue;
         }
 
