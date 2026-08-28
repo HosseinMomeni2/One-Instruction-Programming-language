@@ -1,39 +1,25 @@
-### Example 3: fibo
-## This will calculate and print n first fibo numbers
+### Example 3: function calling
+## This will call the foo and then jumps back to main
+sbn, 0, -1, r0, start
+
+L foo
+out this_is_foo
+out jumping_to_main
+sbn, 0, -1, r0, r15
+
 
 L start
-#input r15
-inp r15
-sbn, r15, 3, r15, end 
+out started
+out linking_r15
+link r15
+out jumping_to_foo
+sbn, 0, -1, r0, foo
+out back_in_main
 
-#set r0, r1 to 1 and 2
-sbn, 0, -1, r0, end
-sbn, 0, -2, r1, end
+out linking_again
+link r15
+out jumping_to_foo_again
+sbn, 0, -2, r0, foo
+out back_in_main_again
 
-#print r0 and r1
-out r0
-out r1
-
-#main loop
-L loop1
-
-#store -r0 into r14
-sbn, 0, r0, r14, +1
-
-#store -r1 in r2 and then -r2 in r0
-#this will be r0 = r1
-sbn, 0, r1, r2, +1
-sbn, 0, r2, r0, end
-
-#since r14 is equal to -r0, -r14 should be added to r1
-sbn, r1, r14, r1, end
-
-#print the new sentence
-out r1
-
-#count
-sbn, r15, 1, r15, end
-sbn, 0, 1, r13, loop1
-
-L end
 out finish
