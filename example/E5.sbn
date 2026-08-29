@@ -1,0 +1,74 @@
+### Example 5: GCD
+## This will print gcd of two numbers
+
+# register usage:
+# r1 and r2 for user input
+# r0 for links
+# r13, r14 for function params
+# r15 for function return value
+# r12 is a global temp register
+
+sbn, 0, 1, r12, start
+
+L mod
+##devides r13 by r14 and returns the remaining value
+
+out mod_called
+
+# subtract repetedly until reach negative
+out subtract:
+out r13
+out r14
+sbn, r13, r14, r13, +2
+sbn, 0, 1, r12, -4
+
+# store -r14 in r12
+out passed_loop
+out r13
+out r14
+sbn, 0, r14, r12, +1
+
+# add r14 to r13 one time
+sbn, r13, r12, r13, +1
+
+# r13 is the answer
+sbn, 0, r13, r12, +1
+sbn, 0, r12, r15, +1
+
+#return
+sbn, 0, 1, r12, r0
+
+
+
+L start
+out called_start
+# get input
+inp r1
+inp r2
+
+out input_taken
+
+# copy input in r13, r14
+sbn, 0, r1, r12, +1
+out neg_r1_copied_to_r12
+out r12
+sbn, 0, r12, r13, +1
+out \r1_copied_to_r13
+out r13
+sbn, 0, r2, r12, +1
+sbn, 0, r12, r14, +1
+out copy_is done
+out r13
+out r14
+
+# call mod function
+out linking
+link r0
+sbn, r0, -3, r0, +1
+out calling_mod
+sbn, 0, 1, r12, mod
+
+# print returned value
+out r15
+
+L end
