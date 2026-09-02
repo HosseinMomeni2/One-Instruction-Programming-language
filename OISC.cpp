@@ -50,7 +50,7 @@ void link(const std::string& line, int line_number) {
     // executes a link line like:
     /// link r5
 
-    // it will store the next line number in the given register
+    // it will store the current line number in the given register
 
     int reg;
     for(int i=0; i<line.size(); i++)
@@ -59,7 +59,7 @@ void link(const std::string& line, int line_number) {
             break;
         }
 
-    REGISTER_FILE[reg] = line_number + 1;
+    REGISTER_FILE[reg] = line_number;
 }
 
 void input(const std::string& line) {
