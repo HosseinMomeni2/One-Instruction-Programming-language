@@ -12,14 +12,14 @@ L start
 out started
 out linking_r15
 link r15
-sbn, r15, -3, r15, +1
+sbn, r15, -4, r15, +1
 out jumping_to_foo
 sbn, 0, 1, r0, foo
 out back_in_main
 
 out linking_again
 link r15
-sbn, r15, -3, r15, +1
+sbn, r15, -4, r15, +1
 out jumping_to_foo_again
 sbn, 0, 2, r0, foo
 out back_in_main_again
