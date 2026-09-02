@@ -17,9 +17,6 @@ sbn, r13, r14, r13, +2
 sbn, 0, 1, r12, -1
 
 # store -r14 in r12
-out passed_loop
-out r13
-out r14
 sbn, 0, r14, r12, +1
 
 # add r14 to r13 one time
@@ -35,10 +32,10 @@ sbn, 0, 1, r12, r0
 
 
 L start
-out called_start
 # get input
-out enter_inp1_and_inp2:
+out enter_inp1:
 inp r1
+out enter_inp2:
 inp r2
 
 # copy input in r13, r14
@@ -48,7 +45,6 @@ sbn, 0, r2, r12, +1
 sbn, 0, r12, r14, +1
 
 # call mod function
-out linking
 link r0
 sbn, r0, -3, r0, +1
 sbn, 0, 1, r12, mod
