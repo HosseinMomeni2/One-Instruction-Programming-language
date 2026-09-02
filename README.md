@@ -85,6 +85,35 @@ L foo
 L next
 ```
 
+### Links
+It is possible to store a line number in a register during runtime using `link` keyword. It is meant to provide the "jump and link" ability and can be very useful to call functions.
+
+#### example:
+In this example a function foo is called and returned. (look at Example3 for a better understanding)
+```text
+L foo
+# this is the function foo
+# ...
+
+# this line will return the pc to where the function was called
+#we assume the r15 is used to link
+sbn 0, 1, r12, r15
+
+L main
+# we want to call foo from here
+
+# first link to r15
+link r15
+# add 5 for a proper return
+sbn, r15, -5, r15, +1
+# jump
+sbn, 0, 1, r12, foo
+
+# pc returns here after foo
+out finish
+
+```
+
 ### Inputs
 The `inp` keyword will take numerical inputs:
 ```text
