@@ -31,6 +31,9 @@ note that you can use following flags after the file name:
 -d    debug
 ```
 
+#### note:
+The commands above was tested on ubuntu24 a adn will need `git` and `make` to be installed. But the project can be built and execute on any other operating system with other tools. please contact me if you have issues building of running this project.
+
 ## Syntax
 
 As a one-instruction language, the syntax is minimal. Nonetheless, here are a few important details.
