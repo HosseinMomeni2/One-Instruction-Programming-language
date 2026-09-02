@@ -24,7 +24,7 @@ int SBN(int* source, int* target, int* dest, int* jump, int* pc) {
     else return *pc + 1;
 }
 
-void output(const std::string& line) {
+std::string output(const std::string& line) {
     // executes an output line in the format:
     /// out r12
     /// out hello
@@ -35,14 +35,46 @@ void output(const std::string& line) {
         param.push_back(line[i]);
     }
 
-    if(param.empty()) return;
+    if(param.empty()) return "out should have an argument.";
 
     if(param[0] == 'r') {
         int reg = stoi(param.substr(1));
         std::cout << REGISTER_FILE[reg] << std::endl;
+        return "ok";
+    } else if(param[0] == '"') {
+        std::string to_print;
+        for(int i=1; i<param.size(); i++)
+        {
+            if(param[i] == '"') break;
+            if(param[i] == '\\')
+            {
+                // handle scape characters
+                switch (param[i+1])
+                {
+                case 'n':  to_print.push_back('\n'); i++; break;
+                case 't':  to_print.push_back('\t'); i++; break;
+                case 'r':  to_print.push_back('\r'); i++; break;
+                case '\\': to_print.push_back('\\'); i++; break;
+                case '"':  to_print.push_back('"');  i++; break;
+                case '\'': to_print.push_back('\''); i++; break;
+
+                default:   // if unknown escape, keep both characters
+                           to_print.push_back('\\');
+                           to_print.push_back(param[i + 1]);
+                           i++;
+                           break;
+                    
+                }
+                continue;
+            }
+
+            to_print.push_back(param[i]);
+        }
+
+        std::cout << to_print << std::endl;
+        return "ok";
     } else {
-        if(param[0] == '\\') param = param.substr(1);
-        std::cout << param << std::endl;
+        return "out needs a string or register. " + param + " is not a string";
     }
 }
 
@@ -231,7 +263,11 @@ int run_block(std::string file, int pc) {
 
         ///output
         if(line.size()>3 && line.substr(0, 3) == "out") {
-            output(line);
+            std::string res = output(line);
+            if(res != "ok") {
+                std::cout << res << std::endl;
+                return -1;
+            }
             pc ++;
             continue;
         }
