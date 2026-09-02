@@ -130,21 +130,21 @@ inp r7
 ```
 
 ### Outputs
-The keyword `out` provides a simple output mechanism:
+The keyword `out` provides a simple output mechanism. It should be continued by a register (like r12) or a string between two qoutation marks:
 ```test
-out <text_or_register>
+out <string_or_register>
 ```
 
 #### example:
 ```text
-out hello_world
-# prints hello_world
+out "hello world"
+# prints hello world
+
+out "hello\nworld"
+# prints hello world in two lines
 
 out r1
 # prints the current value of register 1
-
-out \right_starts_with_r_but_is_not_a_register!
-# prints the literal text (since it's starting with \)
 ```  
 ### note:
 Please be very careful with the syntax, since the project doesn't manage syntax errors yet. Here are some tips for writing SBN programs:
@@ -154,7 +154,7 @@ Please be very careful with the syntax, since the project doesn't manage syntax 
 
 ## Future Plans
 - [ ] Syntax error management
-- [ ] Add ability to print texts with spaces in the middle
+- [X] Add ability to print texts with spaces in the middle
 - [X] Add an input mechanism
 - [ ] Add a load/store command
 - [ ] Seperate functions into multi files
