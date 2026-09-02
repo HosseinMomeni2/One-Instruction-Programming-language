@@ -34,26 +34,59 @@ note that you can use following flags after the file name:
 #### note:
 The commands above was tested on ubuntu24 and will need `git` and `make` to be installed. But the project can be built and execute on any other operating system with other tools. please contact me if you have issues building of running this project.
 
-## Syntax
+## Quick start
+To confirm a prope build, run the E2.sbn file:
+```bash
+./OISC.out example/E2.sbn
+```
+which should output like this:
+```text
+r2:
+6
+r3:
+5
+hello world
 
-As a one-instruction language, the syntax is minimal. Nonetheless, here are a few important details.
+program finished with exit code 0
+```
+
+## Architecture
+
+### Registers
+The simulator provides 16 general-purpose registers, named r0 through r15. All registers can store integer values (both positive and negative).
+
+### Program Counter (PC)
+The Program Counter is an internal pointer that tracks the current execution line. It is not directly accessible as a register, but you can manipulate it through branching operations.
+By default, the PC increments by 1 after each instruction unless a branch occurs.  
+When a branch is taken, the PC is set to the specified target.
+
+### Execution Flow
+- The simulator loads the entire program file into memory. 
+- Execution starts at line 0 (the first instruction).
+- Each sbn instruction is executed in order.
+- The program halts when it reaches the end of the file or encounters an invalid instruction.
+
+⚠️ **Important**: Since syntax error handling is not yet fully implemented, the simulator may behave unexpectedly or crash if your code contains syntax errors. Please read the syntax guid below very carefully and always double-check your instruction formatting.
+
+## Syntax
 
 ### Comments
 Comment lines begin with `#` character:
 ```text
 # this is a comment
 ```
+note: inline comments aren't implemented yet and may (or may not) cause unexpected behaviour.
 
 ### SBN
 The shape of an SBN operation line will be like:
 ```text
-sbn, <source>, <target>, <destination>, <LABEL>
+sbn, <source>, <target>, <destination>, <branch>
 ```
 - `<source>` and `<target>` can be either literal values (e.g., `12`, `-5`) or registers (e.g., `r6`).
 - `<destination>` must be a register.
 - The operation computes `source - target` and stores the result in `<destination>`.
 - If the resulting value (now stored in `<destination>`) is negative, the program counter jumps to the line immediately following the specified `<LABEL>` (which must be defined elsewhere in the file).
-- `<destination>` could be a label's name, a literal line number, a line number stored in a register,  or a value to add (like +14 or -7)
+- `<branch>` could be a label's name, a literal line number, a line number stored in a register,  or a value to add (like +14 or -7)
 
 #### example:
 
@@ -100,7 +133,7 @@ L foo
 
 # this line will return the pc to where the function was called
 #we assume the r15 is used to link
-sbn 0, 1, r12, r15
+sbn, 0, 1, r12, r15
 
 L main
 # we want to call foo from here
@@ -146,11 +179,6 @@ out "hello\nworld"
 out r1
 # prints the current value of register 1
 ```  
-### note:
-Please be very careful with the syntax, since the project doesn't manage syntax errors yet. Here are some tips for writing SBN programs:
-- Don't declare two or more labels with same names (it's good to use numbered labels (e.g., `loop1`, `loop2`, etc.))
-- Be very careful about unwanted branches. Use a dummy label (like `next1`) or a relative dummy branch (like +1) to avoid branches you don't want. (look at Example 3)
-- Use functions to simplify the code but avoid using too many functions. An unnecessary function can extremely affect the code's readability.
 
 ## Future Plans
 - [ ] Syntax error management
