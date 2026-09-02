@@ -36,4 +36,4 @@ sbn, r15, 1, r15, end
 sbn, 0, 1, r13, loop1
 
 L end
-out finish
+out "finish"

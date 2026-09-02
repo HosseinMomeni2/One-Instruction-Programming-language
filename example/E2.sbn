@@ -6,8 +6,8 @@ sbn, 12, 7, r3, start
 L end
 sbn, 12, 6, r2, end
 
-out \r2:
+out "r2:"
 out r2
-out \r3:
+out "r3:"
 out r3
-out hello_world
+out "hello world"

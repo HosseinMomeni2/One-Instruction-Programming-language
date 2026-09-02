@@ -3,25 +3,25 @@
 sbn, 0, 1, r0, start
 
 L foo
-out this_is_foo
-out jumping_to_main
+out "this is foo"
+out "jumping to main"
 sbn, 0, 1, r0, r15
 
 
 L start
-out started
-out linking_r15
+out "started"
+out "linking r15"
 link r15
 sbn, r15, -4, r15, +1
-out jumping_to_foo
+out "jumping to foo"
 sbn, 0, 1, r0, foo
-out back_in_main
+out "back in main"
 
-out linking_again
+out "linking again"
 link r15
 sbn, r15, -4, r15, +1
-out jumping_to_foo_again
+out "jumping to foo again"
 sbn, 0, 2, r0, foo
-out back_in_main_again
+out "back in main again"
 
-out finish
+out "finish"
