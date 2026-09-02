@@ -149,7 +149,7 @@ out \right_starts_with_r_but_is_not_a_register!
 ### note:
 Please be very careful with the syntax, since the project doesn't manage syntax errors yet. Here are some tips for writing SBN programs:
 - Don't declare two or more labels with same names (it's good to use numbered labels (e.g., `loop1`, `loop2`, etc.))
-- Be very careful about unwanted branches. Use a dummy label (like `next1`) to avoid branches you don't want. (look at Example 3)
+- Be very careful about unwanted branches. Use a dummy label (like `next1`) or a relative dummy branch (like +1) to avoid branches you don't want. (look at Example 3)
 - Use functions to simplify the code but avoid using too many functions. An unnecessary function can extremely affect the code's readability.
 
 ## Future Plans
