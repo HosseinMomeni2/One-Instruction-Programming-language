@@ -30,8 +30,8 @@ std::string output(const std::string& line) {
     /// out hello
 
     std::string param;
-    for(int i=3; i<line.size(); i++) {
-        if(line[i] == ' ') continue;
+    int i=3; while(line[i] == ' ') i++;
+    for(i; i<line.size(); i++) {
         param.push_back(line[i]);
     }
 
