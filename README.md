@@ -32,7 +32,7 @@ note that you can use following flags after the file name:
 ```
 
 #### note:
-The commands above was tested on ubuntu24 a adn will need `git` and `make` to be installed. But the project can be built and execute on any other operating system with other tools. please contact me if you have issues building of running this project.
+The commands above was tested on ubuntu24 and will need `git` and `make` to be installed. But the project can be built and execute on any other operating system with other tools. please contact me if you have issues building of running this project.
 
 ## Syntax
 
