@@ -5,8 +5,19 @@ It has been proven that a machine capable of executing SBN is [turing-complete](
 
 ## Features
 
-- No dependency but the g++ compiler
-- Support of labels instead of line numbers for branch operation
+- Minimal Dependencies: The simulator only requires a C++ compiler (like g++) and standard build tools (make) to compile.
+
+- OISC Architecture: Implements the Subtract and Branch if Negative (SBN) instruction.
+
+- 16 General-Purpose Registers: Provides registers r0 through r15 for storing integer values.
+
+- Flexible Branch Targets: The branch destination in an SBN instruction can be a label name, a literal line number, a value stored in a register, or a relative offset (e.g., +1 or -7).
+
+- Link for Function Calls: Includes a link keyword that stores the current program counter into a register, enabling a "jump and link" mechanism for implementing function calls and returns.
+
+- Built-in I/O: Supports simple input with inp (reads numerical values into a register) and output with out (prints register values or quoted strings).
+
+- Debugging Mode: Includes a -d flag that can be passed when running a program to enable debug output.
 
 ## Installation
 
@@ -32,10 +43,10 @@ note that you can use following flags after the file name:
 ```
 
 #### note:
-The commands above was tested on ubuntu24 and will need `git` and `make` to be installed. But the project can be built and execute on any other operating system with other tools. please contact me if you have issues building of running this project.
+The commands above were tested on Ubuntu 24 and require `git` and `make` to be installed. However, the project can be built and executed on any other operating system using other tools. Please contact me if you have issues building or running this project.
 
 ## Quick start
-To confirm a prope build, run the E2.sbn file:
+To confirm a proper build, run E2.sbn file:
 ```bash
 ./OISC.out example/E2.sbn
 ```
